@@ -1,4 +1,25 @@
-.Rproj.user
+echo ".Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+.Rds
+.Rprofile
+*.Rproj
+*.Rout
+*.Rout.save
+*.log
+*.csv~
+*.tsv~
+*.sav
+*.dta
+*.rda
+*.rdata
+*.sqlite
+*.httr-oauth
+/.Rbuildignore
+/.Rproj.user/
+.vscode/
+node_modules/
+.DS_Store
+Thumbs.db
+" > .gitignore
