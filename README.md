@@ -118,8 +118,12 @@ These figures help **assess data quality**:
 
 ### **Posterior Meta-d’ Distribution**
 - **What it shows**: The estimated posterior distribution of **meta-d’**, showing uncertainty around the estimated parameter. More trials will typically reduce uncertainty. 
-- **How to use it**:Optional trace plots can also be inspected for convergence issues, as well as R-hat values.
+
 
 ![Posterior Meta-d](figs/SS9909_posterior_meta_d.png)
+
+### **Trace plot**
+- **How to use it**: Optional trace plots ('fuzzy catapillars') can also be inspected for convergence issues, as well as R-hat values. An unfuzzy plot can indicate issues with convergence. 
+![Meta-d Traceplot](figs/SS9909_traceplot.png)
 
 ---
