@@ -76,13 +76,10 @@ print(results)
 
 ## **Example Figures**
 ### **Confidence Histogram + Trial Alpha**
-```r
-knitr::include_graphics("figs/SS9909_confidence_trial_alpha.png")
-```
+![Confidence Histogram](figs/SS9909_confidence_trial_alpha.png)
 
 ### **Posterior Meta-d’ Distribution**
-```r
-knitr::include_graphics("figs/SS9909_posterior_meta_d.png")
+![Posterior Meta-d](figs/SS9909_posterior_meta_d.png)
 ```
 
 ---
