@@ -1,27 +1,48 @@
----
-title: "HRD Metacognition Analysis"
-author: "Embodied Computation Group"
-date: "`r Sys.Date()`"
-output: html_document
----
+
 
 # **Heart Rate Discrimination (HRD) & Metacognitive Sensitivity Estimation (meta-d')**
 
 This document describes an **R pipeline** for analyzing **Heart Rate Discrimination (HRD) task data** and estimating **metacognitive sensitivity (meta-d')**. This approach allows researchers to assess **how accurately individuals judge their own performance** on an interoceptive discrimination task.
 
+## **How to Use This Package**
+This package provides three main functions:
+1. **`process_hrd_data(hrd_data, confbins)`** – Prepares HRD data by binning confidence ratings and removing missing values.
+2. **`analyze_hrd_data(hrd_data, nRatings, plot_results, show_traceplot, participant_id)`** – Computes metacognitive sensitivity and generates summary statistics.
+3. **`analyze_study(data_dir, nRatings, output_file)`** – Processes multiple HRD log files, runs `analyze_hrd_data()` on each, and creates a **group results** dataset.
+
+### **Setting Confidence Bins (`nRatings`)**
+The `nRatings` parameter determines the number of bins for **confidence ratings**. More bins provide **higher resolution** but require **more trials** to stabilize estimates. Recommended settings:
+- `nRatings = 2`: Low confidence vs. high confidence.
+- `nRatings = 4`: Standard for metacognitive analysis.
+- `nRatings = 6+`: Only if large trial numbers are available.
+
+### **Installation Requirements**
+To run the metacognitive model, you need to install **JAGS** and the `rjags` package:
+- Install **JAGS**: [Download Here](https://sourceforge.net/projects/mcmc-jags/)
+- Install `rjags` in R:
+  ```r
+  install.packages("rjags")
+  ```
+
+---
+
 ## **Heart Rate Discrimination Task (HRD)**
 The HRD task is used to assess **interoceptive accuracy**—the ability to perceive one’s own heartbeat. Participants judge whether presented auditory tones match their own heartbeats. This method provides a **psychophysical estimate** of interoceptive sensitivity and precision, and also collects confidence ratings which can be used to estimate metacognitive parameters.
 
 For more details, see:
-> **Legrand, N., Nikolova, N., Correa, C., Brændholt, M., Stuckert, A., Kildahl, N., ... & Allen, M. (2022).**  The heart rate discrimination task: A psychophysical method to estimate the accuracy and precision of interoceptive beliefs. *Biological Psychology, 168*, 108239.  
-> **[DOI: 10.1016/j.biopsycho.2022.108239](https://www.sciencedirect.com/science/article/pii/S0301051121002325)**
+> **Legrand, N., et al. (2022).**  The heart rate discrimination task: A psychophysical method to estimate the accuracy and precision of interoceptive beliefs. *Biological Psychology, 168*, 108239.  
+> **[DOI: 10.1016/j.biopsycho.2021.108239](https://www.sciencedirect.com/science/article/pii/S0301051121002325)**【65†source】
 
 ## **Metacognitive Efficiency Estimation (meta-d')**
-To evaluate metacognitive ability in HRD, we estimate **meta-d’**, a measure of how well confidence ratings reflect actual task performance. This is adapted in **R** from **Steve Fleming’s MATLAB function `fit_meta_d_mcmc.m`**.
+To evaluate metacognitive ability in HRD, we estimate **meta-d’**, a measure of how well confidence ratings reflect actual task performance. This is adapted in **R** from **Steve Fleming’s hierarchical Bayesian framework**.
 
-For more details on meta-d’ estimation, see:
+For more details, see:
 > **Fleming, S. M. (2017).** HMeta-d: Hierarchical Bayesian Estimation of Metacognitive Efficiency from Confidence Ratings. *Neuroscience of Consciousness.*  
-> **[DOI: 10.1093/nc/nix007](https://doi.org/10.1093/nc/nix007)**.
+> **[DOI: 10.1093/nc/nix007](https://doi.org/10.1093/nc/nix007)**【66†source】.
+
+For a broader review of metacognition measurement, see:
+> **Fleming, S. M., & Lau, H. C. (2014).** How to measure metacognition. *Frontiers in Human Neuroscience, 8*, 443.  
+> **[DOI: 10.3389/fnhum.2014.00443](https://doi.org/10.3389/fnhum.2014.00443)**【64†source】.
 
 ---
 
@@ -53,7 +74,7 @@ A **data frame** containing:
 - **`estimated_slope`**: Estimated decision slope
 - **`mean_accuracy`**: Average accuracy across trials
 - **`mean_confidence`**: Average confidence rating
-- **`auroc`**: Type-2 Area Under the ROC Curve (nonparametric metacognitive discrimination measure)
+- **`auroc`**: Area Under the ROC Curve (discrimination measure)
 - **`d`**: Discrimination index (d')
 - **`metad`**: Meta-d' (metacognitive sensitivity)
 - **`mratio`**: Meta-d' / d' ratio (metacognitive efficiency)
@@ -75,65 +96,18 @@ print(results)
 ---
 
 ## **Example Figures**
+These figures help **assess data quality**:
+
 ### **Confidence Histogram + Trial Alpha**
+- **What it shows**: Distribution of confidence ratings and variability across trials.
+- **How to use it**: A well-calibrated dataset should show **higher confidence on correct trials**.
+
 ![Confidence Histogram](figs/SS9909_confidence_trial_alpha.png)
 
 ### **Posterior Meta-d’ Distribution**
+- **What it shows**: The estimated posterior distribution of **meta-d’**, showing uncertainty.
+- **How to use it**: If the distribution is too wide or centered near zero, the model may have insufficient data.
+
 ![Posterior Meta-d](figs/SS9909_posterior_meta_d.png)
-```
 
 ---
-
-# **2. `process_hrd_data()`**
-## **Function Overview**
-Prepares HRD data by:
-- Converting categorical variables into **numeric format**
-- Binning confidence ratings into **quantiles**
-- Removing trials with **missing (`NA`) confidence ratings**
-
-### **Function Signature**
-```r
-process_hrd_data(hrd_data, confbins)
-```
-
-### **Input Arguments**
-| Argument  | Type    | Description |
-|-----------|--------|-------------|
-| `hrd_data` | DataFrame | Raw HRD data |
-| `confbins` | Integer | Number of confidence bins |
-
-### **Returns**
-A processed **data frame** with:
-- `Signal`: Binary-coded stimulus type (0/1)
-- `Response`: Binary-coded subject response (0/1)
-- `ConfidenceBinned`: Binned confidence levels
-- Other cleaned HRD variables
-
----
-
-## **Example Usage**
-```r
-# Process HRD data before modeling
-processed_data <- process_hrd_data(hrd_data, confbins = 4)
-
-# Preview processed data
-head(processed_data)
-```
-
----
-
-# **Metacognitive Model Fitting Functions**
-The metacognitive model uses **Bayesian estimation** to infer **meta-d’**. This method is adapted from **Steve Fleming’s hierarchical Bayesian framework**.
-
-### **Key Functions in `code/`**
-- `fit_metad_indiv.R` – Fits **individual-level** meta-d’ models.
-- `trials2counts.R` – Converts trial-by-trial responses into **summary counts** for Bayesian modeling.
-- `calc_auroc2.R` – Computes **AUROC** as a measure of discrimination performance.
-
----
-
-# **References**
-- **Legrand, N., et al. (2022).** The heart rate discrimination task: A psychophysical method to estimate the accuracy and precision of interoceptive beliefs. *Biological Psychology, 168*, 108239.  
-  **[DOI: 10.1016/j.biopsycho.2022.108239](https://www.sciencedirect.com/science/article/pii/S0301051121002325)**
-- **Fleming, S. M. (2017).** HMeta-d: Hierarchical Bayesian Estimation of Metacognitive Efficiency from Confidence Ratings. *Neuroscience of Consciousness.*  
-  **[DOI: 10.1093/nc/nix007](https://doi.org/10.1093/nc/nix007)**
