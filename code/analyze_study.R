@@ -29,7 +29,7 @@ for (file in log_files) {
   hrd_data <- read_delim(file, delim = ",")
   
   # Apply the HRD analysis function
-  result <- analyze_hrd_data(hrd_data, nRatings = 4, plot_results = TRUE, show_traceplot = FALSE, participant_id = participant_id)
+  result <- analyze_hrd_data(hrd_data, nRatings = 4, plot_results = TRUE, show_traceplot = TRUE, participant_id = participant_id)
   
   # Add participant ID and session type
   result <- result %>%

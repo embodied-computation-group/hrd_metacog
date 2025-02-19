@@ -102,8 +102,9 @@ analyze_hrd_data <- function(hrd_data, nRatings = 4, plot_results = TRUE, show_t
   
   # Show traceplot if requested and save it
   if (show_traceplot) {
+    png(file = sprintf("figs/%s_traceplot.png", participant_id), width = 6, height = 4, units = "in", res = 300, bg = "white")
     traceplot(output)
-    ggsave(filename = sprintf("figs/%s_traceplot.png", participant_id), width = 8, height = 4, dpi = 300)
+    dev.off()
   }
   
   # Generate posterior distribution plot

@@ -117,7 +117,7 @@ These figures help **assess data quality**:
 ![Confidence Histogram](figs/SS9909_confidence_trial_alpha.png)
 
 ### **Posterior Meta-d’ Distribution**
-- **What it shows**: The estimated posterior distribution of **meta-d’**, showing uncertainty around the estimated parameter.
+- **What it shows**: The estimated posterior distribution of **meta-d’**, showing uncertainty around the estimated parameter. More trials will typically reduce uncertainty. 
 - **How to use it**:Optional trace plots can also be inspected for convergence issues, as well as R-hat values.
 
 ![Posterior Meta-d](figs/SS9909_posterior_meta_d.png)
