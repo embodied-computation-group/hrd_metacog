@@ -43,7 +43,7 @@ The HRD task is used to assess **interoceptive accuracy**—the ability to perce
 
 For more details, see:
 > **Legrand, N., et al. (2022).**  The heart rate discrimination task: A psychophysical method to estimate the accuracy and precision of interoceptive beliefs. *Biological Psychology, 168*, 108239.  
-> **[DOI: 10.1016/j.biopsycho.2021.108239](https://www.sciencedirect.com/science/article/pii/S0301051121002325)**【65†source】
+> **[DOI: 10.1016/j.biopsycho.2021.108239](https://www.sciencedirect.com/science/article/pii/S0301051121002325)**
 
 ## **Metacognitive Efficiency Estimation (meta-d')**
 To evaluate metacognitive ability in HRD, we estimate **meta-d’**, a measure of how well confidence ratings reflect actual task performance. This is adapted in **R** from **Steve Fleming’s hierarchical Bayesian framework**.
