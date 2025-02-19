@@ -15,7 +15,7 @@ source("code/trials2counts.R")
 source("code/fit_metad_indiv.R")
 source("code/calc_auroc2.R")
 
-analyze_hrd_data <- function(hrd_data, nRatings = 4, plot_results = TRUE, show_traceplot = TRUE) {
+analyze_hrd_data <- function(hrd_data, nRatings = 4, plot_results = TRUE, show_traceplot = TRUE, participant_id = "unknown") {
   
   # Ensure factors are correctly formatted
   hrd_data <- make_factors(hrd_data)
@@ -23,17 +23,33 @@ analyze_hrd_data <- function(hrd_data, nRatings = 4, plot_results = TRUE, show_t
   # Process HRD data with the specified number of rating bins
   processed_hrd_data <- process_hrd_data(hrd_data, nRatings)
   
+  # Ensure figs/ directory exists
+  if (!dir.exists("figs")) {
+    dir.create("figs")
+  }
+  
   # Generate and display plots if requested
   if (plot_results) {
     confidence_hist <- plot_confidence_histogram(hrd_data)
     trial_alpha_plot <- plot_trial_alpha(hrd_data)
-    print(confidence_hist + trial_alpha_plot)
+    combined_plot <- confidence_hist + trial_alpha_plot
+    
+    print(combined_plot)
+    
+    # Save figure
+    ggsave(filename = sprintf("figs/%s_confidence_trial_alpha.png", participant_id), plot = combined_plot, width = 8, height = 4, dpi = 150)
   }
   
   # Extract inputs for trials2counts
   stimID <- processed_hrd_data$Signal
   response <- processed_hrd_data$Response
   rating <- processed_hrd_data$ConfidenceBinned
+  
+  # Remove NA values before trials2counts
+  valid_trials <- complete.cases(stimID, response, rating)
+  stimID <- stimID[valid_trials]
+  response <- response[valid_trials]
+  rating <- rating[valid_trials]
   
   # Convert trials to counts
   counts <- trials2counts(stimID, response, rating, nRatings)
@@ -71,14 +87,11 @@ analyze_hrd_data <- function(hrd_data, nRatings = 4, plot_results = TRUE, show_t
   # Compute mean confidence
   mean_confidence <- mean(hrd_data$Confidence, na.rm = TRUE)
   
-  # Compute mean accuracy
-
-  # Ensure ResponseCorrect is numeric (convert from factor levels "FALSE"/"TRUE" to 0/1)
+  # Ensure ResponseCorrect is numeric
   hrd_data$ResponseCorrect <- as.numeric(hrd_data$ResponseCorrect) - 1
   
   # Compute mean accuracy
   mean_accuracy <- mean(hrd_data$ResponseCorrect, na.rm = TRUE)
-  
   
   # Extract final EstimatedThreshold and EstimatedSlope values
   estimated_threshold <- tail(hrd_data$EstimatedThreshold, 1)
@@ -87,9 +100,10 @@ analyze_hrd_data <- function(hrd_data, nRatings = 4, plot_results = TRUE, show_t
   # Print results
   message(sprintf("Metacognition scores: AUROC = %.2f, MRatio = %.2f, Mean Confidence = %.2f", auroc, mratio, mean_confidence))
   
-  # Show traceplot if requested
+  # Show traceplot if requested and save it
   if (show_traceplot) {
     traceplot(output)
+    ggsave(filename = sprintf("figs/%s_traceplot.png", participant_id), width = 8, height = 4, dpi = 300)
   }
   
   # Generate posterior distribution plot
@@ -106,22 +120,24 @@ analyze_hrd_data <- function(hrd_data, nRatings = 4, plot_results = TRUE, show_t
   
   if (plot_results) {
     print(post_plot)
+    ggsave(filename = sprintf("figs/%s_posterior_meta_d.png", participant_id), plot = post_plot, width = 6, height = 4, dpi = 150)
   }
   
   # Return results as a dataframe
   results_df <- data.frame(
     mean_confidence = mean_confidence,
+    estimated_threshold = estimated_threshold,
+    estimated_slope = estimated_slope,
+    mean_accuracy = mean_accuracy,
+    auroc = auroc,
     d = d1,
     metad = metad,
-    mratio = mratio,
-    auroc = auroc,
-    mean_accuracy = mean_accuracy,
-    estimated_threshold = estimated_threshold,
-    estimated_slope = estimated_slope
+    mratio = mratio
   )
   
   return(results_df)
 }
+
 
 # Example usage:
 # hrd_data <- read_delim("path/to/data.txt", delim = ",")

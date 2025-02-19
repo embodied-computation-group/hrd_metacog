@@ -7,7 +7,7 @@ library(tidyverse)
 #'
 #' @return A ggplot2 theme object.
 theme_custom <- function() {
-  theme_minimal(base_size = 14) +
+  theme_minimal(base_size = 10) +
     theme(
       plot.title = element_text(face = "bold", hjust = 0.5),
       axis.title = element_text(face = "bold"),
