@@ -5,10 +5,13 @@
 This document describes an **R pipeline** for analyzing **Heart Rate Discrimination (HRD) task data** and estimating **metacognitive sensitivity (meta-d')**. This approach allows researchers to assess **how accurately individuals judge their own performance** on an interoceptive discrimination task.
 
 ## **How to Use This Package**
-This package provides three main functions:
+This package provides two main functions:
 1. **`process_hrd_data(hrd_data, confbins)`** – Prepares HRD data by binning confidence ratings and removing missing values.
 2. **`analyze_hrd_data(hrd_data, nRatings, plot_results, show_traceplot, participant_id)`** – Computes metacognitive sensitivity and generates summary statistics.
-3. **`analyze_study(data_dir, nRatings, output_file)`** – Processes multiple HRD log files, runs `analyze_hrd_data()` on each, and creates a **group results** dataset.
+
+It also provides an example wrapper script, which can be used to process multiple files:
+
+**`analyze_study`** – Processes multiple HRD log files, runs `analyze_hrd_data()` on each, and creates a **group results** dataset.
 
 ### **Setting Confidence Bins (`nRatings`)**
 The `nRatings` parameter determines the number of bins for **confidence ratings**. More bins provide **higher resolution** but require **more trials** to stabilize estimates. Recommended settings:
