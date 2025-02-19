@@ -11,7 +11,16 @@ This package provides two main functions:
 
 It also provides an example wrapper script, which can be used to process multiple files:
 
-**`analyze_study`** – Processes multiple HRD log files, runs `analyze_hrd_data()` on each, and creates a **group results** dataset.
+**`analyze_study.R`** – Processes multiple HRD log files, runs `analyze_hrd_data()` on each, and creates a **group results** dataset. 
+Note that the user must specify a data directory and the desired number of confidence bins. Will attempt to read the participant ID from the filenames. 
+
+Further helper functions can be inspected in the /code directory:
+
+1. **`helper_functions.R`** - contains basic functions for plotting and processing HRD data
+2. **`calc_auroc2.R`** - adaptated from Matlab, calculates type 2 area under the reciever operating characteristic (AUROC2)
+3. **`trials2counts.R`** - adapted from Matlab, formats confidence data as counts. 
+4. **`bin_confidence_quantiles.R`** - bins continuous confidence ratings in to nRatings - detects overly coarse data and attempts to correct it, unless too extreme, in which case it returns NaNs so the participant can be excluded. 
+5. **`fit_metad_individ.R`** - fits the Bayesian metacognition model. Note that this is fit to single subjects, not hierarchically. 
 
 ### **Setting Confidence Bins (`nRatings`)**
 The `nRatings` parameter determines the number of bins for **confidence ratings**. More bins provide **higher resolution** but require **more trials** to stabilize estimates. Recommended settings:
