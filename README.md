@@ -82,12 +82,12 @@ analyze_hrd_data(hrd_data, nRatings = 4, plot_results = TRUE, show_traceplot = T
 
 ### **Returns**
 A **data frame** containing:
-- **`estimated_threshold`**: Decision threshold from last trial
-- **`estimated_slope`**: Estimated decision slope
+- **`estimated_threshold`**: Decision threshold from last trial, estimated by psi
+- **`estimated_slope`**: Estimated decision slope, estimated by psi
+- **`d`**: Interoceptive sensivity (d')
 - **`mean_accuracy`**: Average accuracy across trials
 - **`mean_confidence`**: Average confidence rating
-- **`auroc`**: Area Under the ROC Curve (discrimination measure)
-- **`d`**: Discrimination index (d')
+- **`auroc`**: Type-2 Area Under the ROC Curve (non-parametric metacognitive discrimination measure)
 - **`metad`**: Meta-d' (metacognitive sensitivity)
 - **`mratio`**: Meta-d' / d' ratio (metacognitive efficiency)
 
@@ -111,14 +111,14 @@ print(results)
 These figures help **assess data quality**:
 
 ### **Confidence Histogram + Trial Alpha**
-- **What it shows**: Distribution of confidence ratings and variability across trials.
-- **How to use it**: A well-calibrated dataset should show **higher confidence on correct trials**.
+- **What it shows**: A) Distribution of confidence ratings and B) evolution of the staircase across trials. Alpha is the delta-BPM threshold, and inspection of this plot can reveal extreme behavior or poorly stabilized thresholds.
+- **How to use it**: Typically, should show **higher confidence on correct trials**, reasonably distributed confidence ratings (extreme skew can impair or make meta-d' estimation impossible), and a converged staircase.
 
 ![Confidence Histogram](figs/SS9909_confidence_trial_alpha.png)
 
 ### **Posterior Meta-d’ Distribution**
-- **What it shows**: The estimated posterior distribution of **meta-d’**, showing uncertainty.
-- **How to use it**: If the distribution is too wide or centered near zero, the model may have insufficient data.
+- **What it shows**: The estimated posterior distribution of **meta-d’**, showing uncertainty around the estimated parameter.
+- **How to use it**:Optional trace plots can also be inspected for convergence issues, as well as R-hat values.
 
 ![Posterior Meta-d](figs/SS9909_posterior_meta_d.png)
 
