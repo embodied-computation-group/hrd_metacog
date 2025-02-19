@@ -53,7 +53,7 @@ A **data frame** containing:
 - **`estimated_slope`**: Estimated decision slope
 - **`mean_accuracy`**: Average accuracy across trials
 - **`mean_confidence`**: Average confidence rating
-- **`auroc`**: Area Under the ROC Curve (discrimination measure)
+- **`auroc`**: Type-2 Area Under the ROC Curve (nonparametric metacognitive discrimination measure)
 - **`d`**: Discrimination index (d')
 - **`metad`**: Meta-d' (metacognitive sensitivity)
 - **`mratio`**: Meta-d' / d' ratio (metacognitive efficiency)
