@@ -50,11 +50,11 @@ To evaluate metacognitive ability in HRD, we estimate **meta-d’**, a measure o
 
 For more details, see:
 > **Fleming, S. M. (2017).** HMeta-d: Hierarchical Bayesian Estimation of Metacognitive Efficiency from Confidence Ratings. *Neuroscience of Consciousness.*  
-> **[DOI: 10.1093/nc/nix007](https://doi.org/10.1093/nc/nix007)**【66†source】.
+> **[DOI: 10.1093/nc/nix007](https://doi.org/10.1093/nc/nix007)**.
 
 For a broader review of metacognition measurement, see:
 > **Fleming, S. M., & Lau, H. C. (2014).** How to measure metacognition. *Frontiers in Human Neuroscience, 8*, 443.  
-> **[DOI: 10.3389/fnhum.2014.00443](https://doi.org/10.3389/fnhum.2014.00443)**【64†source】.
+> **[DOI: 10.3389/fnhum.2014.00443](https://doi.org/10.3389/fnhum.2014.00443)**.
 
 ---
 
