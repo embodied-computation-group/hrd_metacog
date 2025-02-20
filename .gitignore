@@ -24,3 +24,6 @@ node_modules/
 Thumbs.db
 " > .gitignore
 studydata/
+group_results.*csv
+group_results_wide.*csv
+.*jasp

@@ -6,7 +6,7 @@ library(stringr)
 source("code/analyze_hrd_data.R")
 
 # Define the directory where HRD log files are located
-data_dir <- "data/"
+data_dir <- "studydata/"
 
 # Get a list of all HRD log files (*.txt) in the directory
 log_files <- list.files(path = data_dir, pattern = ".*HRD.*\\.txt$", full.names = TRUE)
@@ -20,7 +20,8 @@ for (file in log_files) {
   print(sprintf("Processing file: %s", file))  # Debugging output
   
   # Extract participant ID (assumes ID is at the start before "HRD")
-  participant_id <- str_extract(basename(file), "^[^HRD]+")
+  participant_id <- str_extract(basename(file), "^[A-Z0-9]+(?=HRD)")
+  
   
   # Determine session type (PRE or POST)
   session_type <- ifelse(grepl("POST", file, ignore.case = TRUE), "POST", "PRE")
@@ -29,7 +30,7 @@ for (file in log_files) {
   hrd_data <- read_delim(file, delim = ",")
   
   # Apply the HRD analysis function
-  result <- analyze_hrd_data(hrd_data, nRatings = 4, plot_results = TRUE, show_traceplot = TRUE, participant_id = participant_id)
+  result <- analyze_hrd_data(hrd_data, nRatings = 4, plot_results = FALSE, show_traceplot = FALSE, participant_id = participant_id)
   
   # Add participant ID and session type
   result <- result %>%
